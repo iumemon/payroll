@@ -55,6 +55,49 @@ git clone https://github.com/yourusername/payroll-management-system.git
 cd payroll-management-system
 ```
 
+## 📝 Git Repository Management
+
+This project includes a comprehensive Git setup with version control for all payroll system components.
+
+### Git Setup Script
+We've included a PowerShell script (`git_setup.ps1`) that provides easy Git management:
+
+```powershell
+# Load the Git management functions
+. .\git_setup.ps1
+
+# Show repository status
+Show-GitStatus
+
+# Add and commit changes
+Commit-Changes -Message "Your commit message"
+
+# Create a new feature branch
+New-GitBranch -BranchName "feature/time-tracking"
+
+# Switch between branches
+Switch-GitBranch -BranchName "master"
+
+# Interactive menu for Git operations
+Start-GitMenu
+```
+
+### Git Workflow
+1. **Development**: Work on feature branches
+2. **Testing**: Ensure all tests pass before committing
+3. **Committing**: Use descriptive commit messages
+4. **Merging**: Merge feature branches to master after review
+
+### Important Git Files
+- `.gitignore`: Excludes sensitive files and build artifacts
+- `DEVELOPMENT_PROGRESS.md`: Tracks development milestones
+- `git_setup.ps1`: Git management utilities
+
+### Security Notes
+- Never commit sensitive data (API keys, passwords, etc.)
+- Use environment variables for configuration
+- Review commits before pushing to ensure no sensitive data is included
+
 ### 2. Set Up Virtual Environment
 ```bash
 python -m venv venv
