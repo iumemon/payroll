@@ -1,0 +1,288 @@
+# Payroll Management System - Cursor Rules
+
+## 🚨 DEVELOPMENT PROGRESS TRACKING (CRITICAL)
+**ALWAYS REFER TO `DEVELOPMENT_PROGRESS.md` FOR CURRENT STATUS AND PRIORITIES**
+
+### Progress Tracking Rules
+- **Before starting any work**: Check `DEVELOPMENT_PROGRESS.md` for current status and next priorities
+- **When suggesting features**: Only suggest features that align with the current roadmap priorities
+- **When completing tasks**: Update the progress file to mark completed items
+- **When planning**: Follow the HIGH → MEDIUM → LOW priority order defined in the roadmap
+- **Current Focus**: Time Tracking System (next high priority item)
+
+### Key References
+- **Completed Features**: See ✅ COMPLETED FEATURES section for what's already working
+- **Next Priorities**: See 🚀 NEXT PRIORITIES section for immediate focus areas
+- **Technical Specs**: See 🔧 TECHNICAL SPECIFICATIONS for current stack and implementation details
+- **Testing Info**: See 📝 TESTING INFORMATION for current test status and credentials
+
+## 🖥️ TERMINAL & ENVIRONMENT MANAGEMENT (CRITICAL)
+
+### Terminal Command Guidelines
+- **NEVER use `&&` in PowerShell** - Use `;` or separate commands instead
+- **Use proper Windows paths**: `G:\Payrol` not `/g%3A/Payrol`
+- **Avoid path encoding issues**: Use quotes for paths with spaces
+- **Prefer startup scripts**: Use `.\start_simple.ps1` or `start.bat` instead of manual commands
+- **Check for background processes** before starting new ones
+- **Even AI assistants must follow these rules** - No exceptions for PowerShell syntax
+
+### PowerShell Best Practices
+```powershell
+# ✅ Correct PowerShell syntax
+cd G:\Payrol; python -m uvicorn app.main:app --reload
+Set-Location "G:\Payrol"
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+
+# ❌ Avoid these patterns
+cd /g%3A/Payrol && python script.py  # Wrong separator and path
+```
+
+### Environment Setup Rules
+- **Always check virtual environment**: Activate `venv` before running commands
+- **Verify package installation**: Run `pip install -r requirements.txt` if modules are missing
+- **Use startup scripts**: Prefer `.\start.ps1` or `start.bat` for server startup
+- **Kill stuck processes**: `Get-Process python | Stop-Process -Force` if needed
+- **Check port availability**: `netstat -ano | findstr :8000` before starting server
+
+### Error Prevention Guidelines
+- **Import Management**: Avoid circular imports, use lazy imports when needed
+- **Unicode Issues**: Use UTF-8 encoding for all scripts and avoid special characters in PowerShell
+- **Process Management**: Always stop servers properly with Ctrl+C
+- **Path Handling**: Use consistent path formats across the project
+- **Script Creation**: Test all PowerShell scripts for encoding issues before committing
+- **Command Testing**: Always test terminal commands in both PowerShell and Command Prompt
+
+### Testing Commands Before Implementation
+```powershell
+# ✅ Always test these before suggesting commands
+python -c "from app.main import app; print('Imports OK')"
+python -c "from app.core.database import sync_engine; print('DB OK')"
+Get-Process python | Stop-Process -Force  # Test process management
+netstat -ano | findstr :8000  # Test port checking
+```
+
+## Project Overview
+This is a payroll management system that handles sensitive financial and employee data. Security, accuracy, and compliance are paramount.
+
+## Technology Stack Preferences
+- **Backend**: Python with FastAPI (primary choice)
+- **Database**: PostgreSQL for production (with proper encryption)
+- **ORM**: SQLAlchemy with Alembic for migrations
+- **Authentication**: JWT with proper session management
+- **Testing**: Pytest for unit tests, Playwright for E2E
+- **Documentation**: Sphinx with docstrings for all functions
+- **Code Quality**: Black for formatting, isort for imports, flake8 for linting
+- **Type Checking**: mypy for static type analysis
+
+## Security Guidelines (CRITICAL)
+- Never commit sensitive data (API keys, passwords, connection strings)
+- Use environment variables for all configuration
+- Implement proper input validation and sanitization
+- Use parameterized queries to prevent SQL injection
+- Encrypt all sensitive data at rest and in transit
+- Implement proper authentication and authorization
+- Log security events without exposing sensitive information
+- Follow OWASP security guidelines
+
+## Code Organization
+- Use clear, descriptive function and variable names
+- Group related functionality into modules/services
+- Separate business logic from presentation logic
+- Use consistent file naming conventions (camelCase for JS, snake_case for Python)
+- Organize files by feature/domain rather than by type
+
+## Coding Standards
+- Use Python type hints for all function parameters and return types
+- Follow PEP 8 style guide strictly
+- Write self-documenting code with clear variable names
+- Keep functions small and focused (single responsibility)
+- Use consistent indentation (4 spaces for Python)
+- Remove unused imports and variables
+- Use meaningful commit messages following conventional commits
+- Use snake_case for variables and functions, PascalCase for classes
+- Use descriptive docstrings for all modules, classes, and functions
+
+## Testing Requirements
+- Write unit tests for all business logic
+- Test edge cases and error conditions
+- Mock external dependencies in tests
+- Achieve minimum 80% code coverage
+- Include integration tests for API endpoints
+- Test security vulnerabilities (SQL injection, XSS, etc.)
+
+## Error Handling
+- Use proper error handling (try-catch blocks)
+- Log errors with appropriate detail level
+- Return user-friendly error messages
+- Never expose internal system details in error messages
+- Implement proper HTTP status codes
+- Use custom error classes for different error types
+
+## Data Privacy & Compliance
+- Implement data encryption for PII and financial data
+- Follow GDPR/CCPA guidelines for data handling
+- Implement audit trails for all data modifications
+- Use data masking for non-production environments
+- Implement proper data retention policies
+- Ensure secure data deletion when required
+
+## Performance Guidelines
+- Implement database indexing for frequently queried fields
+- Use pagination for large data sets
+- Implement caching where appropriate
+- Optimize database queries (avoid N+1 problems)
+- Use connection pooling for database connections
+- Monitor and log performance metrics
+
+## Documentation
+- Document all API endpoints with examples
+- Include setup instructions in README
+- Document deployment procedures
+- Maintain changelog for releases
+- Document security procedures and incident response
+- Include database schema documentation
+
+## Development Workflow
+- Use feature branches for development
+- Require code reviews before merging
+- Run automated tests before deployment
+- Use semantic versioning for releases
+- Implement CI/CD pipeline with security scanning
+- Regular dependency updates and security audits
+
+## File Structure Preferences
+```
+├── app/
+│   ├── __init__.py      # Package initialization
+│   ├── main.py          # FastAPI application entry point
+│   ├── core/            # Core application components
+│   │   ├── __init__.py
+│   │   ├── config.py    # Configuration settings
+│   │   ├── security.py  # Security utilities
+│   │   └── database.py  # Database connection
+│   ├── api/             # API routes
+│   │   ├── __init__.py
+│   │   ├── v1/          # API version 1
+│   │   │   ├── __init__.py
+│   │   │   ├── endpoints/
+│   │   │   └── dependencies.py
+│   ├── models/          # SQLAlchemy models
+│   │   ├── __init__.py
+│   │   └── employee.py
+│   ├── services/        # Business logic
+│   │   ├── __init__.py
+│   │   ├── payroll.py
+│   │   └── tax_calculation.py
+│   ├── schemas/         # Pydantic schemas
+│   │   ├── __init__.py
+│   │   └── employee.py
+│   └── utils/           # Utility functions
+│       ├── __init__.py
+│       └── helpers.py
+├── tests/               # Test files
+│   ├── __init__.py
+│   ├── conftest.py      # Pytest configuration
+│   ├── test_api/
+│   └── test_services/
+├── alembic/             # Database migrations
+├── docs/                # Documentation
+├── scripts/             # Deployment/utility scripts
+├── requirements.txt     # Python dependencies
+├── pyproject.toml       # Project configuration
+└── .env.example         # Environment variables template
+```
+
+## Specific Focus Areas
+- **Payroll Calculations**: Ensure mathematical accuracy with proper decimal handling
+- **Tax Calculations**: Implement comprehensive tax calculation logic
+- **Employee Data**: Secure handling of personal and financial information
+- **Reporting**: Generate accurate financial reports and pay stubs
+- **Compliance**: Ensure adherence to labor laws and tax regulations
+- **Integration**: Support for banking systems and accounting software
+
+## 🔧 DEVELOPMENT WORKFLOW & COMMANDS
+
+### Server Management
+- **Start Server**: Use `.\start.ps1` (PowerShell) or `start.bat` (Command Prompt)
+- **Stop Server**: Always use `Ctrl+C` - never kill terminal window
+- **Restart Server**: Stop with Ctrl+C, then run startup script again
+- **Emergency Stop**: `Get-Process python | Stop-Process -Force`
+
+### Development Commands
+```powershell
+# ✅ Recommended development workflow
+.\start_simple.ps1                  # Start development server (no Unicode issues)
+.\start.bat                         # Alternative for Command Prompt
+pip install -r requirements.txt     # Install/update dependencies
+python -c "from app.main import app; print('OK')"  # Test imports
+
+# ✅ Testing and debugging
+python -m pytest                    # Run tests
+python -c "from app.core.database import sync_engine; print('DB OK')"  # Test DB
+
+# ✅ Environment management
+.\venv\Scripts\Activate.ps1         # Activate virtual environment
+pip list | findstr -i "fastapi uvicorn sqlalchemy"  # Check key packages
+
+# ✅ Process management
+Get-Process python | Stop-Process -Force  # Emergency stop
+netstat -ano | findstr :8000       # Check port usage
+```
+
+### Troubleshooting References
+- **Terminal Issues**: See `TROUBLESHOOTING.md` for complete guide
+- **Import Errors**: Check circular imports and package installation
+- **Port Conflicts**: Use `netstat -ano | findstr :8000` to find conflicts
+- **Performance**: Monitor with `Get-Process python | Select-Object CPU, WorkingSet`
+
+## 🔒 IMPORT & DEPENDENCY MANAGEMENT
+
+### Import Best Practices
+- **Avoid circular imports**: Use lazy imports or dependency injection
+- **Check all imports**: Verify modules are installed before importing
+- **Use proper dependencies**: Import from `app.core.database` for DB sessions
+- **Test imports independently**: `python -c "from module import item; print('OK')"`
+
+### Common Import Patterns
+```python
+# ✅ Correct import patterns
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.models.user import User  # Avoid circular imports
+
+# ✅ Lazy imports for dependencies
+def get_current_user(db: Session = Depends(get_db)) -> "User":
+    from app.models.user import User  # Import when needed
+    from app.services.user_service import UserService
+
+# ✅ Proper dependency injection
+def get_db() -> Session:
+    db = sync_session_factory()
+    try:
+        yield db
+    finally:
+        db.close()
+```
+
+## AI Assistant Instructions
+- **FIRST**: Always check `DEVELOPMENT_PROGRESS.md` for current status and priorities before suggesting any work
+- **TERMINAL**: Use proper PowerShell syntax and startup scripts for all server operations
+- **IMPORTS**: Verify all imports work and avoid circular dependencies
+- **TESTING**: Test all changes with the startup scripts before declaring completion
+- **FOCUS**: Only work on features listed in the current HIGH PRIORITY section
+- **PROGRESS**: Update the progress file when completing tasks or milestones
+- **CONTEXT**: Use the completed features list to avoid duplicating existing functionality
+- Always prioritize security when suggesting code changes
+- Suggest proper error handling for financial operations
+- Recommend appropriate testing strategies
+- Focus on code maintainability and readability
+- Consider compliance requirements in all suggestions
+- Suggest performance optimizations where applicable
+- Always validate input data and handle edge cases
+- Recommend secure coding practices
+- **ENVIRONMENT**: Always provide both PowerShell and Command Prompt compatible commands
+- **CLEANUP**: Clean up temporary files and test scripts after completion
+- **SCRIPT TESTING**: Test all PowerShell scripts for Unicode/encoding issues
+- **COMMAND VALIDATION**: Always test commands work before suggesting them
+- **FALLBACK OPTIONS**: Provide multiple ways to accomplish tasks (PowerShell, Command Prompt, manual)
+- **ERROR RECOVERY**: Include troubleshooting steps for common failure scenarios 
