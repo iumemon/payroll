@@ -37,11 +37,13 @@ POOL_CONFIG = {
 }
 
 # For SQLite, we need to use StaticPool for in-memory databases
-# and QueuePool for file-based databases
+# and NullPool for file-based databases (async compatibility)
 if "memory" in DATABASE_URL:
     sqlite_pool_class = StaticPool
+    async_pool_class = StaticPool
 else:
     sqlite_pool_class = QueuePool
+    async_pool_class = pool.NullPool  # Use NullPool for async SQLite
 
 # Create sync engine with optimized settings
 sync_engine = create_engine(
@@ -66,12 +68,7 @@ sync_engine = create_engine(
 # Create async engine with optimized settings
 async_engine = create_async_engine(
     ASYNC_DATABASE_URL,
-    poolclass=sqlite_pool_class,
-    pool_size=POOL_CONFIG["pool_size"],
-    max_overflow=POOL_CONFIG["max_overflow"],
-    pool_timeout=POOL_CONFIG["pool_timeout"],
-    pool_recycle=POOL_CONFIG["pool_recycle"],
-    pool_pre_ping=POOL_CONFIG["pool_pre_ping"],
+    poolclass=async_pool_class,
     echo=settings.DEBUG,
     future=True,
     # SQLite-specific optimizations
